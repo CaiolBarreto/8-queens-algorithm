@@ -63,8 +63,7 @@ class Main:
 
     def run(self):
         self.population_object.create_population(self.number_of_queens)
-        fitness_results = []
-        converged_results = 0
+        result_converged = 0
 
         generation = 1
 
@@ -86,7 +85,6 @@ class Main:
         ]
 
         best_dna_fitness = best_dna.fitness()
-        fitness_results.append(best_dna_fitness)
 
         if self.max_fitness in fitness_of_dna:
             print("\nSolved in Generation {}!".format(generation - 1))
@@ -94,7 +92,7 @@ class Main:
             print_chromosome(best_dna)
             print_board(best_dna.chromosome, self.number_of_queens)
 
-            converged_results += 1
+            result_converged += 1
 
         else:
             print(
@@ -104,10 +102,4 @@ class Main:
             )
             print_board(best_dna.chromosome, self.number_of_queens)
 
-        print(
-            "Taxa de convergência: ",
-            converged_results / 30,
-        )
-        print("\n****** FITNESS MÉDIO DAS EXECUÇÕES******")
-        print("Média: ", numpy.mean(fitness_results))
-        print("Desvio Padrão: ", numpy.std(fitness_results))
+        return best_dna_fitness, result_converged
