@@ -1,7 +1,7 @@
 # Readme
 
 ## Primeira parte:
-- [] **Representação (genótipo):** Permutação de string de bits
+- [ ] **Representação (genótipo):** Permutação de string de bits
 - [x] **Recombinação:** "cut-and-crossfill" crossover
 - [x] **Probabilidade de Recombinação:** 90%
 - [x] **Mutação:** Troca de genes
