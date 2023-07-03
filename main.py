@@ -2,6 +2,7 @@ from operator import indexOf
 from Population import Population
 from utils import *
 import random
+import numpy
 
 
 class Main:
@@ -62,6 +63,8 @@ class Main:
 
     def run(self):
         self.population_object.create_population(self.number_of_queens)
+        fitness_results = []
+        converged_results = 0
 
         generation = 1
 
@@ -82,17 +85,29 @@ class Main:
             indexOf(fitness_of_dna, max(fitness_of_dna))
         ]
 
+        best_dna_fitness = best_dna.fitness()
+        fitness_results.append(best_dna_fitness)
+
         if self.max_fitness in fitness_of_dna:
             print("\nSolved in Generation {}!".format(generation - 1))
 
             print_chromosome(best_dna)
-
             print_board(best_dna.chromosome, self.number_of_queens)
+
+            converged_results += 1
 
         else:
             print(
                 "\nUnfortunately, we could't find the answer until generation {}. The best answer that the algorithm found was:".format(
-                    generation - 1
+                    generation
                 )
             )
             print_board(best_dna.chromosome, self.number_of_queens)
+
+        print(
+            "Taxa de convergência: ",
+            converged_results / 30,
+        )
+        print("\n****** FITNESS MÉDIO DAS EXECUÇÕES******")
+        print("Média: ", numpy.mean(fitness_results))
+        print("Desvio Padrão: ", numpy.std(fitness_results))
