@@ -1,7 +1,7 @@
 # Readme
 
 ## Primeira parte:
-- [ ] **Representação (genótipo):** Permutação de string de bits
+- [] **Representação (genótipo):** Permutação de string de bits
 - [x] **Recombinação:** "cut-and-crossfill" crossover
 - [x] **Probabilidade de Recombinação:** 90%
 - [x] **Mutação:** Troca de genes
@@ -11,7 +11,7 @@
 - [x] **Tamanho da população:** 100
 - [x] **Número de filhos gerados:** 2
 - [x] **Inicialização:** Aleatória
-- [ ] **Condição de término:** Encontrar a solução, ou 10.000 avaliações de fitness
+- [X] **Condição de término:** Encontrar a solução, ou 10.000 avaliações de fitness
 - [x] **Fitness?**
 
 ## Segunda parte:
