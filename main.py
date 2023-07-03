@@ -3,92 +3,91 @@ from Population import Population
 from utils import *
 import random
 
+
 class Main:
-    def __init__(self, population_object, max_fitness):
-        self.population_object = population_object
-        self.max_fitness = max_fitness
+    def __init__(
+        self,
+        population_size=100,
+        mutation_probability=0.4,
+        recombination_probability=0.9,
+        offspring_size=2,
+        parents_pool_size=5,
+        number_of_queens=8,
+    ):
+        self.population_size = population_size
+        self.mutation_probability = mutation_probability
+        self.recombination_probability = recombination_probability
+        self.offspring_size = offspring_size
+        self.parents_pool_size = parents_pool_size
+        self.number_of_queens = number_of_queens
+        self.max_fitness = (number_of_queens * (number_of_queens - 1)) / 2  # 8*7/2 = 28
+
+        self.population_object = Population(
+            population_size, parents_pool_size, self.max_fitness
+        )
 
     # Genetic algorithm
     def genetic_queen(self):
-        mutation_probability = 0.4
-        recombination_probability = 0.9
         new_population = []
 
         for _ in range(len(self.population_object.population) - 2):
-
-            parent_1, parent_2 = self.population_object.choose_parents(self.max_fitness)
+            parent_1, parent_2 = self.population_object.choose_parents()
 
             # Recombination
-            if random.random() < recombination_probability:
-                first_child = self.population_object.crossover(parent_1, parent_2)
-                second_child = self.population_object.crossover(parent_1, parent_2)
+            if random.random() < self.recombination_probability:
+                for child in range(self.offspring_size):
+                    child = self.population_object.crossover(parent_1, parent_2)
+
+                    # Mutations
+                    if random.random() < self.mutation_probability:
+                        child = child.mutate()
+
+                    new_population.append(child)
+
+                    if child.fitness() == self.max_fitness:
+                        break
             else:
-                first_child = parent_1
-                second_child = parent_2
+                for parent in [parent_1, parent_2]:
+                    if random.random() < self.mutation_probability:
+                        parent = parent.mutate()
 
-            # Mutations
-            if random.random() < mutation_probability:
-                first_child = first_child.mutate()
+                    new_population.append(parent)
 
-            if random.random() < mutation_probability:
-                second_child = second_child.mutate()
-
-            new_population.append(first_child)
-            new_population.append(second_child)
-
-            if first_child.fitness(self.max_fitness) == self.max_fitness:
-                break
-
-            if second_child.fitness(self.max_fitness) == self.max_fitness:
-                break
-
-        new_population.sort(key=lambda dna: dna.fitness(self.max_fitness), reverse=True)
+        new_population.sort(key=lambda dna: dna.fitness(), reverse=True)
 
         # Substitute worse
-        new_population = new_population[:len(self.population_object.population)]
+        new_population = new_population[: len(self.population_object.population)]
 
         return new_population
 
-
-if __name__ == "__main__":
-    POPULATION_SIZE = 100
-
-    while True:
-        # say N = 8
-        number_of_queens = int(input("Please enter your desired number of queens (0 for exit): "))
-        if number_of_queens == 0:
-            break
-
-        max_fitness = (number_of_queens * (number_of_queens - 1)) / 2  # 8*7/2 = 28
-
-        population_object = Population(POPULATION_SIZE)
-        population_object.create_population(number_of_queens)
-
-        main = Main(population_object, max_fitness)
+    def run(self):
+        self.population_object.create_population(self.number_of_queens)
 
         generation = 1
+
         while (
-            not max_fitness in [DNA.fitness(max_fitness) for DNA in population_object.population]
+            not self.max_fitness
+            in [DNA.fitness() for DNA in self.population_object.population]
             and generation < 10000
         ):
+            self.population_object.population = self.genetic_queen()
 
-            population_object.population = main.genetic_queen()
             if generation % 10 == 0:
-                print_generation(generation, max_fitness, population_object.population)
+                print_generation(generation, self.population_object.population)
             generation += 1
 
-        fitness_of_dna = [DNA.fitness(max_fitness) for DNA in population_object.population]
+        fitness_of_dna = [DNA.fitness() for DNA in self.population_object.population]
 
-        best_dna = population_object.population[
+        best_dna = self.population_object.population[
             indexOf(fitness_of_dna, max(fitness_of_dna))
         ]
 
-        if max_fitness in fitness_of_dna:
+        if self.max_fitness in fitness_of_dna:
             print("\nSolved in Generation {}!".format(generation - 1))
 
-            print_chromosome(best_dna, max_fitness)
+            print_chromosome(best_dna)
 
-            print_board(best_dna.chromosome, number_of_queens)
+            print_board(best_dna.chromosome, self.number_of_queens)
 
         else:
             print(
@@ -96,4 +95,4 @@ if __name__ == "__main__":
                     generation - 1
                 )
             )
-            print_board(best_dna.chromosome, number_of_queens)
+            print_board(best_dna.chromosome, self.number_of_queens)

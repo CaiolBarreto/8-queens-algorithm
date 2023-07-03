@@ -1,11 +1,13 @@
 import random
 from utils import binary_to_integer
 
-class DNA:
-    def __init__(self, chromosome):
-        self.chromosome = chromosome
 
-    def fitness(self, max_fitness):
+class DNA:
+    def __init__(self, chromosome, max_fitness):
+        self.chromosome = chromosome
+        self.max_fitness = max_fitness
+
+    def fitness(self):
         horizontal_collisions = (
             sum([self.chromosome.count(queen) - 1 for queen in self.chromosome]) / 2
         )
@@ -30,11 +32,13 @@ class DNA:
                 counter += right_diagonal[index] - 1
             diagonal_collisions += counter
 
-        return int(max_fitness - (horizontal_collisions + diagonal_collisions))
+        return int(self.max_fitness - (horizontal_collisions + diagonal_collisions))
 
     def mutate(self):
         size = len(self.chromosome)
-        mutation_indices = random.sample(range(size), 2)  # Select two distinct indices for gene swapping
+        mutation_indices = random.sample(
+            range(size), 2
+        )  # Select two distinct indices for gene swapping
 
         # Swap genes
         self.chromosome[mutation_indices[0]], self.chromosome[mutation_indices[1]] = (
