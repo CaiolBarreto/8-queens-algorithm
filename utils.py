@@ -1,3 +1,11 @@
+class ParentsSelection:
+    TOURNAMENT = 1
+    ROULETTE = 2
+
+class SurvivorChoice:
+    SUBSTITUTE_WORSE = 1
+    GENERACIONAL = 2
+
 # prints given chromosome
 def print_chromosome(dna):
     integer_chromosome_array = [binary_to_integer(gene) for gene in dna.chromosome]

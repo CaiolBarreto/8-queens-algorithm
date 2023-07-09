@@ -13,6 +13,9 @@ class Main:
         recombination_probability=0.9,
         offspring_size=2,
         parents_pool_size=5,
+        parents_selection=ParentsSelection.TOURNAMENT,
+        survivor_choice=SurvivorChoice.SUBSTITUTE_WORSE,
+        elitism_size=None,
         number_of_queens=8,
     ):
         self.population_size = population_size
@@ -21,15 +24,20 @@ class Main:
         self.offspring_size = offspring_size
         self.parents_pool_size = parents_pool_size
         self.number_of_queens = number_of_queens
+        self.survivor_choice=survivor_choice
+        self.elitism_size = elitism_size
         self.max_fitness = (number_of_queens * (number_of_queens - 1)) / 2  # 8*7/2 = 28
 
         self.population_object = Population(
-            population_size, parents_pool_size, self.max_fitness
+            population_size, parents_pool_size, self.max_fitness, parents_selection
         )
 
     # Genetic algorithm
     def genetic_queen(self):
         new_population = []
+
+        if self.elitism_size != None:
+            new_population.extend(self.population_object.population[:self.elitism_size])
 
         for _ in range(len(self.population_object.population) - 2):
             parent_1, parent_2 = self.population_object.choose_parents()
@@ -53,6 +61,9 @@ class Main:
                         parent = parent.mutate()
 
                     new_population.append(parent)
+
+        if self.survivor_choice == SurvivorChoice.SUBSTITUTE_WORSE:
+            new_population.extend(self.population_object.population)
 
         new_population.sort(key=lambda dna: dna.fitness(), reverse=True)
 
