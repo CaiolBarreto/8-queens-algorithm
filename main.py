@@ -2,7 +2,6 @@ from operator import indexOf
 from Population import Population
 from utils import *
 import random
-import numpy
 
 
 class Main:
@@ -24,7 +23,7 @@ class Main:
         self.offspring_size = offspring_size
         self.parents_pool_size = parents_pool_size
         self.number_of_queens = number_of_queens
-        self.survivor_choice=survivor_choice
+        self.survivor_choice = survivor_choice
         self.elitism_size = elitism_size
         self.max_fitness = (number_of_queens * (number_of_queens - 1)) / 2  # 8*7/2 = 28
 
@@ -75,7 +74,7 @@ class Main:
     def run(self):
         self.population_object.create_population(self.number_of_queens)
         result_converged = 0
-
+        pop_converged = 0
         generation = 1
 
         while (
@@ -90,7 +89,11 @@ class Main:
             generation += 1
 
         fitness_of_dna = [DNA.fitness() for DNA in self.population_object.population]
-
+        
+        for item_fitness in fitness_of_dna:
+            if item_fitness == self.max_fitness:
+                pop_converged += 1
+        
         best_dna = self.population_object.population[
             indexOf(fitness_of_dna, max(fitness_of_dna))
         ]
@@ -98,7 +101,7 @@ class Main:
         best_dna_fitness = best_dna.fitness()
 
         if self.max_fitness in fitness_of_dna:
-            print("\nSolved in Generation {}!".format(generation - 1))
+            print("\nSolved in Generation {}!".format(generation))
 
             print_chromosome(best_dna)
             print_board(best_dna.chromosome, self.number_of_queens)
@@ -113,4 +116,4 @@ class Main:
             )
             print_board(best_dna.chromosome, self.number_of_queens)
 
-        return best_dna_fitness, result_converged
+        return best_dna_fitness, result_converged, generation, fitness_of_dna, pop_converged
