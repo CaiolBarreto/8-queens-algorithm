@@ -1,7 +1,7 @@
 # Readme
 
 ## Primeira parte:
-- [ ] **Representação (genótipo):** Permutação de string de bits
+- [x] **Representação (genótipo):** Permutação de string de bits
 - [x] **Recombinação:** "cut-and-crossfill" crossover
 - [x] **Probabilidade de Recombinação:** 90%
 - [x] **Mutação:** Troca de genes
@@ -17,9 +17,9 @@
 ## Segunda parte:
 ### Implementar possíveis melhorias mudando:
   - [ ] **Representação**
-  - [ ] **Recombinação**
-  - [ ] **Mutação**
-  - [ ] **Seleção de pais:** Roleta?
-  - [ ] **Seleção de sobreviventes:** Geracional ou substituição do pior
-  - [ ] **Tamanho da população:** 10? 30? 50? 70? 120? 200?
+  - [x] **Recombinação**
+  - [x] **Mutação**
+  - [x] **Seleção de pais:** Roleta?
+  - [x] **Seleção de sobreviventes:** Geracional ou substituição do pior
+  - [x] **Tamanho da população:** 10? 30? 50? 70? 120? 200?
   - [ ] **O fitness pode ser melhorado?**
